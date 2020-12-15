@@ -1,18 +1,23 @@
 <?php
-
 error_reporting(0);
-
 if(isset($_POST['domain'])){
     $domain = $_POST['domain'];
-    $token = "YOURTOKEN"; // Change This
+    $token = "at_CViRsgCDVU3vpPojy3xtwXxT8TUA8"; // Change This
     $ip = gethostbyname($domain);
     $auth = "https://reverse-ip.whoisxmlapi.com/api/v1?apiKey=".$token."&ip=".$ip;
-    $json = file_get_contents($auth);
-    if(!$json){
-        echo 'failed data. please sure your domain is just like : domain.com';
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_URL, $auth);
+    $result = curl_exec($ch);
+    curl_close($ch);
+    $json = json_decode($result, true);
+    $result = $json["result"];
+    if(!$result){
+        $error_code = $json["code"];
+        $messages = $json["messages"];
+        echo 'ERROR : '.$messages.'('.$error_code.')';
     }else{
-        $json_data = json_decode($json, true);
-        $result = $json_data["result"];
         foreach($result as $res){
             echo '
 '.$res["name"].'';
@@ -21,5 +26,4 @@ if(isset($_POST['domain'])){
 }else{
     echo 'try again';
 }
-
 ?>
