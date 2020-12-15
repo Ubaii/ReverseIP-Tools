@@ -2,7 +2,7 @@
 error_reporting(0);
 if(isset($_POST['domain'])){
     $domain = $_POST['domain'];
-    $token = "at_CViRsgCDVU3vpPojy3xtwXxT8TUA8"; // Change This
+    $token = "YOUR_TOKEN"; // Change This
     $ip = gethostbyname($domain);
     $auth = "https://reverse-ip.whoisxmlapi.com/api/v1?apiKey=".$token."&ip=".$ip;
     $ch = curl_init();
